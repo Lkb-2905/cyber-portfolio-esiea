@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MPC Sandbox</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>MPC Sandbox</h1>
+        <p>Partage de secret (Shamir) + signature HMAC démonstrative.</p>
+      </header>
+
+      <section class="panel">
+        <h2>1. Split (partager un secret)</h2>
+        <label>
+          Secret (texte)
+          <input id="split-secret" type="text" value="mon-secret-demo" />
+        </label>
+        <div class="row">
+          <label>
+            Seuil
+            <input id="split-threshold" type="number" min="2" value="3" />
+          </label>
+          <label>
+            Parts
+            <input id="split-shares" type="number" min="2" value="5" />
+          </label>
+        </div>
+        <button id="split-button">Générer</button>
+        <pre id="split-output" class="output"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>2. Combine (reconstruire le secret)</h2>
+        <label>
+          Shares (JSON)
+          <textarea id="combine-shares" rows="6"></textarea>
+        </label>
+        <button id="combine-button">Reconstruire</button>
+        <pre id="combine-output" class="output"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>3. Sign (démonstration)</h2>
+        <label>
+          Message
+          <input id="sign-message" type="text" value="bonjour" />
+        </label>
+        <label>
+          Shares (JSON)
+          <textarea id="sign-shares" rows="6"></textarea>
+        </label>
+        <button id="sign-button">Signer</button>
+        <pre id="sign-output" class="output"></pre>
+      </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

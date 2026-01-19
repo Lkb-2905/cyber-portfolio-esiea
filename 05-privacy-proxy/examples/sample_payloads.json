@@ -1,0 +1,12 @@
+{
+  "samples": [
+    {
+      "description": "Profil utilisateur",
+      "payload": "Bonjour, je suis Jean Dupont, mon email est jean.dupont@example.com et mon tel 0612345678."
+    },
+    {
+      "description": "Facturation",
+      "payload": "Veuillez prélever sur l'IBAN FR7630006000011234567890189."
+    }
+  ]
+}

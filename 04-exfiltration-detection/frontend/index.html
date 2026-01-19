@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exfiltration Detection</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Détection d’exfiltration</h1>
+        <p>Simulation de flux réseau + détection d’anomalies.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Générer des flux</h2>
+        <div class="row">
+          <label>
+            Nombre de flux
+            <input id="flow-count" type="number" min="50" value="400" />
+          </label>
+          <label>
+            Ratio anomalies
+            <input id="anomaly-ratio" type="number" step="0.01" min="0.01" max="0.5" value="0.1" />
+          </label>
+        </div>
+        <button id="generate-button">Générer & détecter</button>
+        <div id="summary" class="summary"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Résultats</h2>
+        <button id="refresh-button">Rafraîchir</button>
+        <div id="table-container"></div>
+      </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

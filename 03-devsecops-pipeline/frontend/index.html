@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevSecOps Demo</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>DevSecOps Pipeline Demo</h1>
+        <p>Mini application pour démontrer un pipeline sécurité.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Créer un item</h2>
+        <div class="row">
+          <label>
+            Nom
+            <input id="item-name" type="text" placeholder="Nom" />
+          </label>
+          <label>
+            Owner
+            <input id="item-owner" type="text" placeholder="Owner" />
+          </label>
+        </div>
+        <button id="create-button">Créer</button>
+      </section>
+
+      <section class="panel">
+        <h2>Items</h2>
+        <button id="refresh-button">Rafraîchir</button>
+        <div id="items-list" class="items"></div>
+      </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
