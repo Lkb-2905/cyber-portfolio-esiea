@@ -52,3 +52,11 @@ Chaque dossier contient un `README.md` avec :
 - les prérequis,
 - la procédure d’installation,
 - et les commandes pour lancer/tests.
+
+## Démarrage express (recruteurs)
+Exemples rapides pour lancer un projet localement :
+- MPC Sandbox : `cd 01-mpc-sandbox/backend` → `python -m pip install -r requirements.txt` → `python -m uvicorn app.main:app --reload`
+- Confidential Computing : `cd 02-confidential-computing/backend` → `python -m pip install -r requirements.txt` → `python -m uvicorn app.main:app --reload`
+- DevSecOps Demo : `cd 03-devsecops-pipeline/backend` → `python -m pip install -r requirements.txt` → `python -m uvicorn app.main:app --reload`
+- Exfiltration Detection : `cd 04-exfiltration-detection/backend` → `python -m pip install -r requirements.txt` → `python -m uvicorn app.main:app --reload`
+- Privacy Proxy : `cd 05-privacy-proxy/backend` → `python -m pip install -r requirements.txt` → `python -m uvicorn app.main:app --reload`
