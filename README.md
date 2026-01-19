@@ -4,8 +4,7 @@
 ![security-pipeline](https://github.com/Lkb-2905/cyber-portfolio-esiea/actions/workflows/security.yml/badge.svg)
 ![dependabot](https://img.shields.io/badge/dependabot-enabled-brightgreen)
 
-Ce dossier regroupe 5 projets démonstrateurs conçus pour un profil étudiant
-en cybersécurité (ESIEA), alignés avec des attentes de type DevSecOps,
+Ce dossier regroupe 5 projets démonstrateurs, alignés avec des attentes de type DevSecOps,
 confidential computing et privacy.
 
 ## Projets
