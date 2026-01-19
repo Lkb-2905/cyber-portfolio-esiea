@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List
 
 
@@ -18,7 +18,7 @@ class FlowRecord:
 
 def generate_flows(count: int = 500, anomaly_ratio: float = 0.1) -> List[FlowRecord]:
     random.seed(42)
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     records: List[FlowRecord] = []
     for i in range(count):
         ts = (start_time + timedelta(seconds=i * 15)).isoformat() + "Z"
