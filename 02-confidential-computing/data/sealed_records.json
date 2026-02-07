@@ -1,0 +1,22 @@
+{
+  "937bebf9-dedc-4085-87ba-d733feca3c87": {
+    "ciphertext_b64": "Yl2ClN003HqQ3g==",
+    "wrapped_key_b64": "c3HIH4+PTIrtjSpOqYdNwZ3TUAStB+i4p/qAOMLrSEI=",
+    "nonce_b64": "o1AqMmI5ebaZTsmRaU+WFQ=="
+  },
+  "5ff47449-0921-4f25-a08e-38e19d40a324": {
+    "ciphertext_b64": "Om9mmGg=",
+    "wrapped_key_b64": "iQdedWIoPbUXuuEHucPq+qmB4tdoyZP07Oe1oH6vg4Q=",
+    "nonce_b64": "z/aLIsoDTOqyyoypljouBw=="
+  },
+  "784df701-7064-4ad5-8689-b4ce8e33e182": {
+    "ciphertext_b64": "7snrnOGxhUA1YQ==",
+    "wrapped_key_b64": "ufZp0oMfrq76y8VTXgU9VKSetYL2DBnQQh3lu7JA1Wc=",
+    "nonce_b64": "bBkB58JCbOILqwq9CJei/A=="
+  },
+  "2b66c916-f0be-457b-80ff-26a50b9acbda": {
+    "ciphertext_b64": "rNZAlj4=",
+    "wrapped_key_b64": "L4Ys3ZHZ/SxGzzFdf3xFEK+9LXWUxR7oHLCxj7RXdcQ=",
+    "nonce_b64": "EN88yQOSXwU3nSZAu8I1gg=="
+  }
+}

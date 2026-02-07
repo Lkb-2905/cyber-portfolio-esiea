@@ -1,0 +1,167 @@
+01 — MPC Sandbox (Shamir)
+Sous‑titre : Partage de secret & signature distribuée — MPC, Shamir, cryptographie, FastAPI, HMAC, tests
+02 — Confidential Computing (TEE simulée)
+Sous‑titre : Chiffrement “in‑use” & enclaves — TEE, confidential computing, key wrapping, encryption, FastAPI
+03 — DevSecOps Pipeline Demo
+Sous‑titre : CI/CD sécurisé & supply‑chain — DevSecOps, SAST, DAST, SBOM, Cosign, GitHub Actions, FastAPI
+04 — Exfiltration Detection
+Sous‑titre : Détection d’anomalies réseau — ML, Isolation Forest, monitoring, FastAPI, dashboard
+05 — Privacy Proxy (PII Shield)
+Sous‑titre : Protection des données personnelles — privacy, PII detection, redaction, regex, FastAPI
+
+1 — MPC Sandbox
+cd "C:\Users\pc\OneDrive - Groupe ESIEA\MON DOSSIER\Nouveau dossier\01-mpc-sandbox\backend"py -3 -m pip install -r requirements.txtpy -3 -m uvicorn app.main:app --reload
+Puis ouvre : http://127.0.0.1:8000
+02 — Confidential Computing
+cd "C:\Users\pc\OneDrive - Groupe ESIEA\MON DOSSIER\Nouveau dossier\02-confidential-computing\backend"py -3 -m pip install -r requirements.txtpy -3 -m uvicorn app.main:app --reload
+Puis ouvre : http://127.0.0.1:8000
+03 — DevSecOps Pipeline Demo
+cd "C:\Users\pc\OneDrive - Groupe ESIEA\MON DOSSIER\Nouveau dossier\03-devsecops-pipeline\backend"py -3 -m pip install -r requirements.txtpy -3 -m uvicorn app.main:app --reload
+Puis ouvre : http://127.0.0.1:8000
+04 — Exfiltration Detection
+cd "C:\Users\pc\OneDrive - Groupe ESIEA\MON DOSSIER\Nouveau dossier\04-exfiltration-detection\backend"py -3 -m pip install -r requirements.txtpy -3 -m uvicorn app.main:app --reload
+Puis ouvre : http://127.0.0.1:8000
+05 — Privacy Proxy
+cd "C:\Users\pc\OneDrive - Groupe ESIEA\MON DOSSIER\Nouveau dossier\05-privacy-proxy\backend"py -3 -m pip install -r requirements.txtpy -3 -m uvicorn app.main:app --reload
+Puis ouvre : http://127.0.0.1:8000
+
+
+Voici un rapport détaillé pour chacun des 5 projets. J’ai structuré chaque rapport avec : objectifs, valeur pour recruteur, architecture, fonctionnalités, sécurité, tests, limites et pistes d’amélioration.
+01 — MPC Sandbox (Shamir)
+1) Contexte & objectif
+Le projet vise à démontrer un partage de secret (Shamir Secret Sharing) dans un contexte MPC. L’objectif est pédagogique : montrer comment un secret est divisé en n parts, reconstruisible uniquement si un seuil t est atteint.
+2) Valeur pour recruteur
+Montre des bases solides en cryptographie appliquée.
+Démontre une capacité à construire une API claire + UI.
+Prouve l’attention portée aux tests et à la validation.
+3) Architecture
+Backend FastAPI : logique de split/combine, endpoints REST.
+Frontend statique : page HTML + JS pour piloter les API.
+Tests : couverture des cas critiques (split, reconstruction, API).
+4) Fonctionnalités
+POST /api/split : génère n parts avec un seuil t.
+POST /api/combine : reconstruit un secret à partir de parts.
+POST /api/sign : démonstration de signature HMAC après reconstruction.
+UI permettant de générer des parts et de tester la reconstruction.
+5) Sécurité & choix techniques
+Utilisation d’un champ fini (grand premier).
+Interpolations de Lagrange côté serveur.
+HMAC comme démonstration de signature (notion de “TSS” simplifiée).
+6) Tests & validation
+Tests unitaires sur split/combine.
+Tests d’API sur la reconstruction et signature.
+7) Limites
+Pas un protocole MPC complet ni TSS réel.
+Pas de gestion de transport sécurisé entre parties (démo locale).
+8) Pistes d’amélioration
+Remplacer HMAC par une vraie signature distribuée (TSS).
+Gestion multi‑parties via sessions.
+Ajout de logs et audits cryptographiques.
+02 — Confidential Computing (TEE simulée)
+1) Contexte & objectif
+Le projet simule une enclave TEE pour montrer le concept de chiffrement in‑use : les données sont chiffrées, le data key est protégé par une clé maîtresse isolée.
+2) Valeur pour recruteur
+Montre compréhension de confidential computing.
+Prouve l’aptitude à modéliser un processus clé en main (scellage/déscellage).
+3) Architecture
+TeeSimulator : stockage de la master key.
+Store local : persistance des données scellées.
+API FastAPI : CRUD minimal pour sceller/désceller.
+4) Fonctionnalités
+POST /api/records : chiffrement + enregistrement.
+GET /api/records/{id} : déchiffrement côté enclave simulée.
+GET /api/records : liste des IDs scellés.
+5) Sécurité & choix techniques
+Data key générée par enregistrement.
+Master key isolée dans un fichier simulé (TEE).
+Chiffrement XOR simplifié pour la démo (remplaçable par AES‑GCM).
+6) Tests & validation
+Test de round‑trip (scellage/déscellage).
+Test de la liste des enregistrements.
+7) Limites
+TEE simulée, pas un vrai SGX/Nitro.
+Chiffrement XOR à remplacer en production.
+8) Pistes d’amélioration
+Intégration SGX/Nitro.
+AES‑GCM + rotation de clés.
+Audit logs + contrôle d’accès.
+03 — DevSecOps Pipeline Demo
+1) Contexte & objectif
+Le projet illustre un pipeline DevSecOps complet sur une application simple. L’objectif est de montrer une maîtrise de la sécurité supply‑chain et de la CI/CD.
+2) Valeur pour recruteur
+Montre une maîtrise d’outils pro (SAST, DAST, SBOM, signature).
+Très aligné avec des environnements DevSecOps modernes.
+3) Architecture
+Backend FastAPI (CRUD simple).
+Frontend statique (UI minimaliste).
+CI GitHub Actions : pipeline en plusieurs jobs.
+4) Fonctionnalités CI
+SAST : Semgrep (règles p/ci).
+Scan dépendances : Trivy.
+SBOM : Syft (SPDX JSON).
+Signature : Cosign (keyless via OIDC).
+DAST : ZAP baseline sur l’API locale.
+5) Tests & validation
+Tests unitaires sur l’API.
+Workflow GitHub Actions déclenché au push.
+6) Limites
+App volontairement simple.
+DAST basique (baseline), pas de scénarios avancés.
+7) Pistes d’amélioration
+Policy‑as‑code (OPA/Conftest).
+Attestations SLSA.
+Secrets scanning intégré.
+04 — Exfiltration Detection
+1) Contexte & objectif
+Projet axé sur la détection d’exfiltration via anomalie sur des flux réseau. Simulation + modèle ML léger.
+2) Valeur pour recruteur
+Montre un lien concret entre réseau et détection.
+Prouve la capacité à produire un dashboard de résultats.
+3) Architecture
+Générateur de flux (normal vs anomalie).
+Détecteur Isolation Forest.
+API FastAPI pour générer/consulter.
+UI dashboard simple.
+4) Fonctionnalités
+POST /api/generate : génération + détection.
+GET /api/detections : dernier run.
+Tableau des flux + label + score.
+5) Sécurité & choix techniques
+Isolation Forest adapté aux anomalies non supervisées.
+Features simples (bytes_out, port).
+6) Tests & validation
+Test que des anomalies sont détectées.
+Tests API de bout en bout.
+7) Limites
+Données synthétiques.
+Features limitées.
+8) Pistes d’amélioration
+Intégration Zeek ou logs réels.
+Features enrichies (durée, protocole).
+Évaluation précision/recall.
+05 — Privacy Proxy (PII Shield)
+1) Contexte & objectif
+Projet axé sur la protection de données personnelles : détection et masquage de PII avant transit ou stockage.
+2) Valeur pour recruteur
+Montre un angle privacy engineering très recherché.
+Applicable directement à des APIs réelles.
+3) Architecture
+Moteur regex de détection.
+Service FastAPI.
+Exemples de payload.
+4) Fonctionnalités
+POST /api/inspect : détecte et masque PII.
+Types PII : email, téléphone FR, IBAN.
+5) Sécurité & choix techniques
+Regex explicites et contrôlées.
+Redaction systématique.
+6) Tests & validation
+Test unitaires sur détection et redaction.
+Test API.
+7) Limites
+Regex limitées.
+Pas de classification avancée (NLP).
+8) Pistes d’amélioration
+Ajout de PII (NIR, cartes, passeports).
+Mode “block” si PII détectée.
+Middleware reverse proxy.

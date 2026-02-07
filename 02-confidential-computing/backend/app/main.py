@@ -6,17 +6,34 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 
+import structlog
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from app.models import RecordListResponse, SealRequest, SealResponse, UnsealResponse
 from app.storage import EnvelopeStore
 from app.tee_simulator import TeeConfig, TeeSimulator
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+if not (BASE_DIR / "backend").exists():
+    BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
+
+# Configure structured logging
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ]
+)
+logger = structlog.get_logger()
 
 store = EnvelopeStore(DATA_DIR / "sealed_records.json")
 tee = TeeSimulator(TeeConfig(master_key_path=DATA_DIR / "tee_master_key.bin"))
 
 app = FastAPI(title="Confidential Computing Sandbox", version="1.0.0")
+
+# Instrument FastAPI for Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 
 @app.get("/api/health")

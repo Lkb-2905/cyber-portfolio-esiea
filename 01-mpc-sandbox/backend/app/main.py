@@ -7,14 +7,31 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+import structlog
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from app.crypto_utils import decode_secret, encode_secret, int_to_bytes, sha256_hex, bytes_to_int
 from app.models import CombineRequest, CombineResponse, SignRequest, SignResponse, SplitRequest, SplitResponse
 from app.shamir import PRIME, Share, combine_shares, split_secret
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+if not (BASE_DIR / "backend").exists():
+    BASE_DIR = Path(__file__).resolve().parents[1]
 FRONTEND_DIR = BASE_DIR / "frontend"
 
+# Configure structured logging
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ]
+)
+logger = structlog.get_logger()
+
 app = FastAPI(title="MPC Sandbox", version="1.0.0")
+
+# Instrument FastAPI for Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")

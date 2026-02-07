@@ -1,11 +1,29 @@
-from __future__ import annotations
-
 from fastapi import FastAPI, HTTPException
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+if not (BASE_DIR / "backend").exists():
+    BASE_DIR = Path(__file__).resolve().parents[1]
+
+import structlog
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.models import InspectRequest, InspectResponse
 from app.pii_detector import detect_pii, redact_pii
 
+# Configure structured logging
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ]
+)
+logger = structlog.get_logger()
+
 app = FastAPI(title="Privacy Proxy", version="1.0.0")
+
+# Instrument FastAPI for Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 
 @app.get("/api/health")

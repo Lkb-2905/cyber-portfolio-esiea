@@ -7,12 +7,29 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+import structlog
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from app.models import Item, ItemCreate, ItemList
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+if not (BASE_DIR / "backend").exists():
+    BASE_DIR = Path(__file__).resolve().parents[1]
 FRONTEND_DIR = BASE_DIR / "frontend"
 
+# Configure structured logging
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ]
+)
+logger = structlog.get_logger()
+
 app = FastAPI(title="DevSecOps Demo API", version="1.0.0")
+
+# Instrument FastAPI for Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
