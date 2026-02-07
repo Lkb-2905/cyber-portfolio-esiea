@@ -1,42 +1,76 @@
-# Confidential Computing Sandbox (TEE simulée)
+# Dossier de Consultation des Entreprises (DCE) - Technique : 02-Confidential-Computing
 
-Ce projet simule un service “confidential computing” en séparant :
-- **chiffrement des données** (data key),
-- **protection du data key** (master key conservée dans une TEE simulée).
+## 1. Contexte et Objectifs
+Le projet **Confidential Computing** simule un environnement d'exécution de confiance (Trusted Execution Environment - TEE) pour le traitement de données sensibles.
 
-⚠️ La TEE est **simulée** pour un POC local (pas un vrai SGX/Nitro).
+**Objectif Principal :** Garantir que les données ne sont jamais exposées en clair, même lors de leur traitement ou de leur stockage, en utilisant une simulation d'enclave sécurisée.
 
-## Fonctionnalités
-- `POST /api/records` : chiffre et scelle un enregistrement.
-- `GET /api/records/{id}` : déchiffre côté “TEE”.
-- `GET /api/records` : liste des IDs.
+**Cas d'Usage :**
+- Traitement de données médicales ou financières.
+- Cloud Computing sécurisé.
+- Protection de la propriété intellectuelle (modèles IA).
 
-## Démarrage rapide
+## 2. Spécifications Techniques
 
-### Prérequis
-- Python 3.10+
+### 2.1 Architecture Logicielle
+L'architecture repose sur le principe de "Sealing" (Scellement) des données.
 
-### Installation
-```bash
-cd backend
-python -m pip install -r requirements.txt
-```
+- **TEE Simulator :** Un module Python simulant une enclave matérielle (type Intel SGX) qui chiffre/déchiffre les données à la volée.
+- **Storage :** Stockage persistant chiffré (Envelope Encryption). Seule l'enclave possède la clé maîtresse (`tee_master_key.bin`).
+- **API :** Interface REST pour interagir avec l'enclave simulée.
 
-### Lancer l’API
-```bash
-cd backend
-python -m uvicorn app.main:app --reload
-```
+### 2.2 Stack Technologique
+| Composant | Technologie | Version | Description |
+| :--- | :--- | :--- | :--- |
+| **Langage** | Python | 3.11 | Cryptographie et simulation logicielle. |
+| **Framework API** | FastAPI | 0.115.6 | Interface HTTP performante et typée. |
+| **Sécurité** | AES-GCM | Standard | Chiffrement authentifié pour le scellement des données. |
+| **Conteneurisation** | Docker | Multi-stage | Image optimisée avec gestion des droits utilisateur (non-root). |
 
-## Exemple de requêtes
-```bash
-curl -X POST http://127.0.0.1:8000/api/records \
-  -H "Content-Type: application/json" \
-  -d "{\"data\":\"secret\", \"encoding\":\"utf-8\"}"
+## 3. Installation et Déploiement
 
-curl http://127.0.0.1:8000/api/records/{record_id}?encoding=utf-8
-```
+### 3.1 Prérequis
+- Moteur de conteneur : Docker (v20.10+)
 
-## Notes de sécurité
-Ce POC utilise un chiffrement XOR pour simplifier la démo. Dans un vrai
-environnement, on utiliserait AES-GCM et un TEE réel (Nitro/SGX).
+### 3.2 Déploiement via Docker (Recommandé)
+Le déploiement inclut la persistance des données via le dossier `data/`.
+
+1.  **Construction de l'image :**
+    ```bash
+    # Depuis la racine du projet (02-confidential-computing/)
+    docker build -t confidential-computing-backend -f backend/Dockerfile .
+    ```
+
+2.  **Lancement du conteneur :**
+    ```bash
+    docker run -d -p 8000:8000 --name confidential-computing confidential-computing-backend
+    ```
+
+3.  **Vérification :**
+    L'application est accessible sur `http://localhost:8000`.
+
+## 4. Mesures et Observabilité
+L'observabilité est cruciale pour détecter les accès non autorisés ou les anomalies de performance.
+
+### 4.1 Métriques (Prometheus)
+Endpoint : `/metrics`
+- **Indicateurs Clés :**
+    - `http_requests_total` : Suivi des appels API.
+    - `tee_operations_count` (Custom) : Nombre d'opérations de scellement/descellement.
+    - `p99_latency` : Latence des opérations cryptographiques.
+
+### 4.2 Logging Structuré (JSON)
+Logs formatés en JSON via `structlog` pour audit de sécurité.
+- **Audit :** Chaque accès à une donnée "scellée" est logué avec un timestamp précis et l'ID de la requête, sans révéler le contenu déchiffré.
+
+## 5. API et Fonctionnalités
+Documentation interactive sur `/docs`.
+
+### Endpoints Principaux
+1.  **POST `/api/records`** (Seal) : Envoie une donnée brute à l'enclave. L'enclave la chiffre et retourne un ID de registre.
+2.  **GET `/api/records/{id}`** (Unseal) : Demande à l'enclave de déchiffrer et restituer la donnée originale.
+3.  **GET `/api/records`** : Liste les identifiants des données stockées (métadonnées uniquement).
+
+---
+**Version du Document :** 2.0.0
+**Dernière Mise à jour :** Février 2026
