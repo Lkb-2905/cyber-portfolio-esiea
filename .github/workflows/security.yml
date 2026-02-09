@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate SBOM (Syft)
-        uses: anchore/sbom-action@v0.15.12
+        uses: anchore/sbom-action@v0.21.1
         with:
           format: spdx-json
           output-file: sbom.spdx.json
